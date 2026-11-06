@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <!-- ═══════════════════════════════════════════════════════════════
+       META — mobile-first, safe-area aware, warm neutral theme
+       ═══════════════════════════════════════════════════════════════ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E4E8EF">
+  <meta name="color-scheme" content="light">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       TITLE & DESCRIPTION — honest, Persian, no marketing noise
+       ═══════════════════════════════════════════════════════════════ -->
+  <title>اوراکل برنامه‌نویس — Arkman</title>
+  <meta
+    name="description"
+    content="یک دستگاه کوچک نئومورفیک روی میز کار که هر بار با فشردن دکمه، یک جمله‌ی تازه از دنیای برنامه‌نویسی بیرون می‌دهد. ساخته‌شده توسط شاه کدر — محمد ادیب محمدی."
+  >
+  <meta name="author" content="محمد ادیب محمدی — شاه کدر">
+  <meta name="robots" content="index, follow">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       FONT — Vazirmatn only. Preconnect first, then the stylesheet.
+       Weights: 300, 400, 500, 700, 900
+       ═══════════════════════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       GSAP — core, ScrollTrigger, TextPlugin
+       Loaded with defer so they execute before script.js (also defer).
+       All GSAP calls in script.js are guarded, so a CDN failure
+       degrades gracefully.
+       ═══════════════════════════════════════════════════════════════ -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    defer
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    defer
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"
+    defer
+  ></script>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PROJECT STYLES — the entire visual language lives here
+       ═══════════════════════════════════════════════════════════════ -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- ═══════════════════════════════════════════════════════════════
+       SKIP LINK — visually hidden until focused.
+       Lets keyboard users jump straight to the device.
+       ═══════════════════════════════════════════════════════════════ -->
+  <a class="skip-link" href="#stage">پرش به دستگاه اوراکل</a>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       INLINE SVG SPRITE — decorative + functional icon set.
+       Hidden from layout, available to <use> anywhere in the page.
+       No external images, no icon fonts.
+       ═══════════════════════════════════════════════════════════════ -->
+  <svg
+    class="svg-sprite"
+    aria-hidden="true"
+    focusable="false"
+    width="0"
+    height="0"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: copy — two offset rounded rectangles
+           Used by the optional copy-quote micro-feature.
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-copy" viewBox="0 0 24 24">
+        <path
+          d="M8.5 8.5h8.2a1.8 1.8 0 0 1 1.8 1.8v8.2a1.8 1.8 0 0 1-1.8 1.8H8.5a1.8 1.8 0 0 1-1.8-1.8v-8.2a1.8 1.8 0 0 1 1.8-1.8Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15.5 8.5V6.2A1.7 1.7 0 0 0 13.8 4.5H6.2A1.7 1.7 0 0 0 4.5 6.2v7.6a1.7 1.7 0 0 0 1.7 1.7h2.3"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: check — a quiet confirmation tick
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path
+          d="M5 12.5 9.6 17 19 7.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: close — modal dismissal
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path
+          d="M6 6l12 12M18 6L6 18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: github — simple mark for the footer link
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-github" viewBox="0 0 24 24">
+        <path
+          d="M12 2.8a9.2 9.2 0 0 0-2.9 17.9c.46.08.63-.2.63-.44v-1.6c-2.56.56-3.1-1.1-3.1-1.1-.42-1.06-1.02-1.34-1.02-1.34-.84-.57.06-.56.06-.56.93.07 1.42.96 1.42.96.83 1.42 2.18 1.01 2.71.77.08-.6.32-1.01.58-1.24-2.04-.23-4.19-1.02-4.19-4.55 0-1 .36-1.82.95-2.46-.1-.23-.41-1.16.09-2.42 0 0 .77-.25 2.52.94a8.7 8.7 0 0 1 4.59 0c1.75-1.19 2.52-.94 2.52-.94.5 1.26.19 2.19.09 2.42.59.64.95 1.46.95 2.46 0 3.54-2.15 4.32-4.2 4.55.33.29.62.85.62 1.72v2.55c0 .24.17.52.63.44A9.2 9.2 0 0 0 12 2.8Z"
+          fill="currentColor"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: sound on — speaker with two waves
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-sound" viewBox="0 0 24 24">
+        <path
+          d="M4.5 9.5h3.2L12 6.2v11.6l-4.3-3.3H4.5a1.2 1.2 0 0 1-1.2-1.2v-2.6a1.2 1.2 0 0 1 1.2-1.2Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15 8.8a4.4 4.4 0 0 1 0 6.4M17.6 6.4a7.8 7.8 0 0 1 0 11.2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: sound off — speaker with a slash
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-mute" viewBox="0 0 24 24">
+        <path
+          d="M4.5 9.5h3.2L12 6.2v11.6l-4.3-3.3H4.5a1.2 1.2 0 0 1-1.2-1.2v-2.6a1.2 1.2 0 0 1 1.2-1.2Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16 9l4 6M20 9l-4 6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: spark — the small four-point star used on the button
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-spark" viewBox="0 0 24 24">
+        <path
+          d="M12 3.5c.5 4.2 1.8 5.5 6 6-4.2.5-5.5 1.8-6 6-.5-4.2-1.8-5.5-6-6 4.2-.5 5.5-1.8 6-6Z"
+          fill="currentColor"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: oracle — a soft eye-in-a-diamond, used in the crown
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-oracle" viewBox="0 0 48 48">
+        <path
+          d="M24 5 43 24 24 43 5 24 24 5Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M13 24c3.6-5.4 7.2-8 11-8s7.4 2.6 11 8c-3.6 5.4-7.2 8-11 8s-7.4-2.6-11-8Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+        />
+        <circle cx="24" cy="24" r="3.2" fill="currentColor" />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: gear — a quiet mechanical motif for the device
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-gear" viewBox="0 0 48 48">
+        <path
+          d="M24 14.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        />
+        <path
+          d="M24 8v4M24 36v4M8 24h4M36 24h4M12.7 12.7l2.8 2.8M32.5 32.5l2.8 2.8M35.3 12.7l-2.8 2.8M15.5 32.5l-2.8 2.8"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: terminal — a prompt window etched on the crown
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-terminal" viewBox="0 0 48 48">
+        <rect
+          x="7"
+          y="10"
+          width="34"
+          height="28"
+          rx="4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        />
+        <path
+          d="M13 19l5 5-5 5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M22 29h9"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: branch — a git branch motif for the serial plate
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-branch" viewBox="0 0 48 48">
+        <circle cx="14" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <circle cx="14" cy="36" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <circle cx="34" cy="20" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <path
+          d="M14 15.2v17.6M17.2 20h8.6a5.2 5.2 0 0 0 5.2-5.2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: cursor — a tiny pointer for decorative etching
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-cursor" viewBox="0 0 24 24">
+        <path
+          d="M5 3l14 8-6.2 1.4L10 19 5 3Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: bug — a friendly bug etched into the base
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-bug" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="13.5" rx="4.6" ry="5.4" fill="none" stroke="currentColor" stroke-width="1.4" />
+        <path
+          d="M12 8.1V5.4M9.4 9.3 7.6 7.5M14.6 9.3l1.8-1.8M8 13.5H4.8M19.2 13.5H16M8.6 17.6l-2.2 1.8M15.4 17.6l2.2 1.8"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: coffee — a warm cup, the desk companion
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-coffee" viewBox="0 0 24 24">
+        <path
+          d="M5 10h11v5.2A4.8 4.8 0 0 1 11.2 20H9.8A4.8 4.8 0 0 1 5 15.2V10Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16 11h1.6a2.4 2.4 0 0 1 0 4.8H16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        />
+        <path
+          d="M8.2 7.2c.6-.9.2-1.7 0-2.4M11.4 7.2c.6-.9.2-1.7 0-2.4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: moon — optional theme toggle motif
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-moon" viewBox="0 0 24 24">
+        <path
+          d="M20 14.2A8.4 8.4 0 0 1 9.8 4a8.5 8.5 0 1 0 10.2 10.2Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: sun — optional theme toggle motif
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: screw — a tiny Phillips head for the device body
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-screw" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.2" />
+        <path
+          d="M12 7.4v9.2M7.4 12h9.2"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+        />
+      </symbol>
+
+      <!-- ─────────────────────────────────────────────────────────
+           ICON: vent — a single slot used to build the vent grille
+           ───────────────────────────────────────────────────────── -->
+      <symbol id="icon-vent" viewBox="0 0 24 6">
+        <rect x="1" y="2" width="22" height="2" rx="1" fill="currentColor" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       AMBIENT BACKGROUND
+       Two purely decorative layers:
+         .ambient__glow  — a warm, breathing radial wash
+         .ambient__grain — a fine noise texture drawn with SVG data URI
+       Both are aria-hidden and pointer-events: none.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__glow"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SITE BAR — light, quiet, three-part header.
+       The hint is a real anchor to #creator, so the modal is
+       keyboard-reachable without JavaScript.
+       ═══════════════════════════════════════════════════════════════ -->
+  <header class="site-bar">
+    <span class="site-bar__mark" aria-hidden="true">π</span>
+    <span class="site-bar__title">اوراکل برنامه‌نویس</span>
+    <a class="site-bar__hint" href="#creator" aria-label="درباره‌ی سازنده">
+      <span class="site-bar__hint-text">v1.0 — Arkman</span>
+      <svg class="site-bar__hint-icon" aria-hidden="true" width="14" height="14">
+        <use href="#icon-oracle"></use>
+      </svg>
+    </a>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MAIN STAGE — the device sits on the desk.
+       Everything inside .device is the creative canvas; only the two
+       IDs (#quoteBox, #generateBtn) are contractual.
+       ═══════════════════════════════════════════════════════════════ -->
+  <main class="stage" id="stage">
+    <section class="device" aria-label="دستگاه اوراکل">
+
+      <!-- ─────────────────────────────────────────────────────────
+           DEVICE BODY — the large neomorphic pedestal.
+           Layers, top to bottom in the visual stack:
+             .device__crown    — etched metal cap with shimmer
+             .device__slot     — the mouth the card emerges from
+             .quote-card       — the oracle's answer
+             .device__btn      — the only action button
+             .device__sound    — a quiet decorative toggle
+             .device__vents    — a grille for physical realism
+             .device__plaque   — a serial plate with the maker's mark
+             .device__led      — a small warm status light
+             .device__feet     — rubber feet at the base
+           ───────────────────────────────────────────────────────── -->
+      <div class="device__body">
+
+        <!-- ═══════════════════════════════════════════════════════
+             CROWN — a soft metal cap. The inline SVG etches circuit
+             traces, tiny scratches, and the oracle eye. The CSS
+             animates a slow specular shimmer across the top face.
+             ═══════════════════════════════════════════════════════ -->
+        <div class="device__crown" aria-hidden="true">
+          <svg
+            class="device__crown-etch"
+            viewBox="0 0 420 96"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- Soft outer bevel of the crown -->
+            <rect
+              x="1"
+              y="1"
+              width="418"
+              height="94"
+              rx="46"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.22"
+              stroke-width="1"
+            />
+            <!-- Inner hairline, slightly offset — a used object -->
+            <rect
+              x="10"
+              y="8"
+              width="400"
+              height="80"
+              rx="40"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.10"
+              stroke-width="1"
+            />
+
+            <!-- ── Circuit trace: left branch ─────────────────── -->
+            <path
+              d="M46 58h34l12-12h26l10 10h30"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.28"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle cx="46" cy="58" r="2.4" fill="currentColor" fill-opacity="0.32" />
+            <circle cx="158" cy="56" r="2.4" fill="currentColor" fill-opacity="0.32" />
+
+            <!-- ── Circuit trace: right branch ────────────────── -->
+            <path
+              d="M374 58h-34l-12-12h-26l-10 10h-30"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.28"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle cx="374" cy="58" r="2.4" fill="currentColor" fill-opacity="0.32" />
+            <circle cx="262" cy="56" r="2.4" fill="currentColor" fill-opacity="0.32" />
+
+            <!-- ── Central oracle eye, small and quiet ─────────── -->
+            <g transform="translate(186 30) scale(1)">
+              <path
+                d="M24 5 43 24 24 43 5 24 24 5Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.34"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13 24c3.6-5.4 7.2-8 11-8s7.4 2.6 11 8c-3.6 5.4-7.2 8-11 8s-7.4-2.6-11-8Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.30"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+              />
+              <circle cx="24" cy="24" r="2.6" fill="currentColor" fill-opacity="0.40" />
+            </g>
+
+            <!-- ── Tiny scratches — the device has been used ───── -->
+            <path
+              d="M300 18l16 3M306 24l9 2M118 72l14-2M124 78l7-1"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.14"
+              stroke-width="1"
+              stroke-linecap="round"
+            />
+            <path
+              d="M196 12l3 6M204 12l-2 6"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.10"
+              stroke-width="1"
+              stroke-linecap="round"
+            />
+
+            <!-- ── Four micro-screws at the crown corners ──────── -->
+            <g opacity="0.35">
+              <use href="#icon-screw" x="22" y="10" width="18" height="18"></use>
+              <use href="#icon-screw" x="380" y="10" width="18" height="18"></use>
+              <use href="#icon-screw" x="22" y="68" width="18" height="18"></use>
+              <use href="#icon-screw" x="380" y="68" width="18" height="18"></use>
+            </g>
+          </svg>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SLOT — the dark mouth the quote card slides out of.
+             An inset neomorphic well with an uneven inner shadow,
+             plus a soft warm lip at the bottom.
+             ═══════════════════════════════════════════════════════ -->
+        <div class="device__slot" aria-hidden="true">
+          <span class="device__slot-lip"></span>
+          <span class="device__slot-depth"></span>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             QUOTE CARD — aria-live polite.
+             #quoteBox is the ONLY element the original JS writes to.
+             Everything else inside is decorative or updated by the
+             additive layer in script.js.
+             ═══════════════════════════════════════════════════════ -->
+        <article class="quote-card" aria-live="polite">
+          <div class="quote-card__inner">
+
+            <!-- Eyebrow label — a quiet invitation -->
+            <p class="quote-card__eyebrow">از اوراکل بپرس…</p>
+
+            <!-- The contract: this exact id must exist and hold text -->
+            <p class="quote-card__text" id="quoteBox">سلام، برنامه‌نویس عزیز — آماده‌ای؟</p>
+
+            <!-- Meta row: status dot + unique-quote counter -->
+            <div class="quote-card__meta">
+              <span class="quote-card__dot" aria-hidden="true"></span>
+              <span class="quote-card__counter" id="quoteCounter">۰ از ۱۰</span>
+            </div>
+
+            <!-- Decorative corner ornaments — purely visual -->
+            <span class="quote-card__corner quote-card__corner--tl" aria-hidden="true"></span>
+            <span class="quote-card__corner quote-card__corner--tr" aria-hidden="true"></span>
+            <span class="quote-card__corner quote-card__corner--bl" aria-hidden="true"></span>
+            <span class="quote-card__corner quote-card__corner--br" aria-hidden="true"></span>
+
+            <!-- A slow, diagonal sheen that sweeps on reveal -->
+            <span class="quote-card__shine" aria-hidden="true"></span>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════
+             PRIMARY BUTTON — #generateBtn is the original binding.
+             type="button" is required; no inline handlers.
+             The inner spans give the CSS a physical press surface.
+             ═══════════════════════════════════════════════════════ -->
+        <button
+          class="device__btn"
+          id="generateBtn"
+          type="button"
+          aria-label="دریافت جمله"
+        >
+          <span class="device__btn-inner">
+            <span class="device__btn-icon" aria-hidden="true">✦</span>
+            <span class="device__btn-label">بخوان</span>
+          </span>
+          <span class="device__btn-press" aria-hidden="true"></span>
+        </button>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SOUND TOGGLE — decorative but functional.
+             aria-pressed is toggled by the additive JS layer.
+             ═══════════════════════════════════════════════════════ -->
+        <button
+          class="device__sound"
+          id="soundBtn"
+          type="button"
+          aria-pressed="false"
+          aria-label="صدا"
+        >
+          <span class="device__sound-icon" aria-hidden="true">♪</span>
+          <span class="device__sound-ring" aria-hidden="true"></span>
+        </button>
+
+        <!-- ═══════════════════════════════════════════════════════
+             VENT GRILLE — twelve thin slots.
+             Built from a single symbol so the markup stays honest.
+             ═══════════════════════════════════════════════════════ -->
+        <div class="device__vents" aria-hidden="true">
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+          <span class="device__vent"><svg><use href="#icon-vent"></use></svg></span>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SERIAL PLAQUE — a small etched plate with the maker's
+             mark, the model, and a git-branch motif.
+             ═══════════════════════════════════════════════════════ -->
+        <div class="device__plaque" aria-hidden="true">
+          <svg
+            class="device__plaque-svg"
+            viewBox="0 0 260 52"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="1"
+              y="1"
+              width="258"
+              height="50"
+              rx="10"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.26"
+              stroke-width="1"
+            />
+            <path
+              d="M18 16h36M18 26h54M18 36h28"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.18"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+            <g transform="translate(196 10)">
+              <use href="#icon-branch" width="32" height="32"></use>
+            </g>
+            <text
+              x="18"
+              y="12"
+              font-family="Vazirmatn, sans-serif"
+              font-size="7"
+              fill="currentColor"
+              fill-opacity="0.42"
+              letter-spacing="1.2"
+            >ORACLE · MK-I</text>
+            <text
+              x="18"
+              y="48"
+              font-family="Vazirmatn, sans-serif"
+              font-size="6"
+              fill="currentColor"
+              fill-opacity="0.30"
+              letter-spacing="0.8"
+            >ARKMAN CODING · 1403</text>
+          </svg>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             LED — a small warm status light.
+             Breathes very slowly; the CSS owns the timing.
+             ═══════════════════════════════════════════════════════ -->
+        <span class="device__led" aria-hidden="true">
+          <span class="device__led-core"></span>
+        </span>
+
+        <!-- ═══════════════════════════════════════════════════════
+             FEET — two rubber pads at the base.
+             They ground the device on the desk visually.
+             ═══════════════════════════════════════════════════════ -->
+        <span class="device__foot device__foot--start" aria-hidden="true"></span>
+        <span class="device__foot device__foot--end" aria-hidden="true"></span>
+
+        <!-- ═══════════════════════════════════════════════════════
+             TINY ETCHINGS — scattered, faint, and deliberately
+             imperfect. They make the object feel used rather than
+             rendered.
+             ═══════════════════════════════════════════════════════ -->
+        <span class="device__etch device__etch--one" aria-hidden="true">
+          <svg width="22" height="22"><use href="#icon-terminal"></use></svg>
+        </span>
+        <span class="device__etch device__etch--two" aria-hidden="true">
+          <svg width="18" height="18"><use href="#icon-bug"></use></svg>
+        </span>
+        <span class="device__etch device__etch--three" aria-hidden="true">
+          <svg width="18" height="18"><use href="#icon-coffee"></use></svg>
+        </span>
+        <span class="device__etch device__etch--four" aria-hidden="true">
+          <svg width="18" height="18"><use href="#icon-cursor"></use></svg>
+        </span>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           DEVICE CAPTION — the maker's signature under the device.
+           Also an anchor to #creator, so the modal opens via :target.
+           Safe-area aware via CSS.
+           ═══════════════════════════════════════════════════════════ -->
+      <a class="device__caption" href="#creator" aria-label="درباره‌ی سازنده">
+        <span class="device__caption-dot" aria-hidden="true"></span>
+        <span>ساخته‌شده توسط شاه کدر — محمد ادیب محمدی</span>
+      </a>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       FOOTER — quiet, three pieces, safe-area aware.
+       ═══════════════════════════════════════════════════════════════ -->
+  <footer class="site-foot">
+    <span class="site-foot__copy">© ۱۴۰۳ — Arkman</span>
+    <span class="site-foot__dot" aria-hidden="true">·</span>
+    <a
+      class="site-foot__link"
+      href="https://github.com/ArkmanCoding"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg class="site-foot__icon" aria-hidden="true" width="14" height="14">
+        <use href="#icon-github"></use>
+      </svg>
+      <span>github.com/ArkmanCoding</span>
+    </a>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       CREATOR MODAL — pure CSS via :target.
+       The backdrop and the close button are anchors to "#", so the
+       modal closes without any JavaScript. The panel is a real
+       dialog region; all interactive children are focusable.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div
+    id="creator"
+    class="creator"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="creatorTitle"
+  >
+    <a href="#" class="creator__backdrop" aria-label="بستن" tabindex="-1"></a>
+
+    <div class="creator__panel">
+      <a href="#" class="creator__close" aria-label="بستن">
+        <svg aria-hidden="true" width="16" height="16">
+          <use href="#icon-close"></use>
+        </svg>
+      </a>
+
+      <!-- Avatar: a letter inside a neomorphic medallion -->
+      <div class="creator__avatar" aria-hidden="true">
+        <span class="creator__avatar-letter">A</span>
+        <span class="creator__avatar-ring"></span>
+      </div>
+
+      <h2 class="creator__title" id="creatorTitle">شاه کدر</h2>
+      <p class="creator__role">محمد ادیب محمدی — بندر ترکمن</p>
+
+      <div class="creator__divider" aria-hidden="true">
+        <span class="creator__divider-dot"></span>
+      </div>
+
+      <p class="creator__bio">
+        متخصص طراحی سیستم فروش · متخصص طراحی سایت ·
+        مهندس هوش مصنوعی · بازی‌ساز و هکر قانونمند.
+      </p>
+
+      <ul class="creator__links">
+        <li>
+          <a
+            class="creator__link"
+            href="https://github.com/ArkmanCoding"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="creator__link-icon" aria-hidden="true" width="16" height="16">
+              <use href="#icon-github"></use>
+            </svg>
+            <span>github.com/ArkmanCoding</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="creator__footnote">
+        این دستگاه یک تمرین کوچک است — با احترام به همه‌ی برنامه‌نویس‌هایی
+        که هنوز به باگ‌هایشان می‌خندند.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NOSCRIPT — a gentle fallback message. The quote generator still
+       works because the original JS is the only thing needed for
+       core behavior; this note simply explains the missing motion.
+       ═══════════════════════════════════════════════════════════════ -->
+  <noscript>
+    <div class="noscript-note" role="status">
+      برای دیدن انیمیشن‌ها و تجربه‌ی کامل، جاوااسکریپت را فعال کنید.
+      دکمه‌ی «بخوان» با این حال کار می‌کند.
+    </div>
+  </noscript>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PROJECT SCRIPT — defer so the DOM is ready.
+       The original practice code is the first block inside,
+       completely untouched. All additions are clearly separated
+       and wrapped in an IIFE.
+       ═══════════════════════════════════════════════════════════════ -->
+  <script src="script.js" defer></script>
+</body>
+</html>

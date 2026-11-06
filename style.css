@@ -1,0 +1,3067 @@
+/* ═══════════════════════════════════════════════════════════════════
+   THE DEV ORACLE — style.css
+   ─────────────────────────────────────────────────────────────────
+   A neomorphic oracle machine on a warm developer's desk.
+   Mobile-first. RTL. One warm accent. Every shadow is honest:
+   light from top-left, dark from bottom-right, always.
+
+   Author: Arkman · شاه کدر — محمد ادیب محمدی
+   License: MIT
+   ─────────────────────────────────────────────────────────────────
+   این نسخه شامل تمام حالت‌های جدید است:
+     • دکمه‌ی خواندن با data-speaking
+     • دکمه‌ی کپی
+     • توست
+     • اشتراک
+     • حالت‌های گفتار (is-speaking, is-arriving, is-flipping)
+     • حالت‌های کارت (is-emerging, is-settled, has-quote)
+     • وضعیت توقف حرکت (animations-paused)
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────────────
+   00 — فهرست
+   ─────────────────────────────────────────────────────────────────
+   01. توکن‌های طراحی
+   02. ریست و پایه
+   03. تایپوگرافی
+   04. پایه‌های دسترس‌پذیری
+   05. پس‌زمینه‌ی محیطی
+   06. نوار بالا
+   07. صحنه و چیدمان دستگاه
+   08. دستگاه — بدنه
+   09. دستگاه — تاج
+   10. دستگاه — شکاف
+   11. کارت نقل‌قول
+   12. دستگاه — دکمه‌ی اصلی
+   13. دستگاه — دکمه‌ی صدا/خواندن
+   14. دستگاه — دریچه‌ها
+   15. دستگاه — پلاک
+   16. دستگاه — LED، پاها، حکاکی‌ها
+   17. دستگاه — کپشن
+   18. فوتر
+   19. مودال سازنده
+   20. نوتیف Noscript
+   21. کی‌فریم‌ها و حرکت محیطی
+   22. توست
+   23. دکمه‌ی کپی
+   24. دکمه‌ی اشتراک
+   25. حالت‌های گفتار و کارت
+   26. ریپل
+   27. حالت‌های تعاملی
+   28. حالت‌های توقف حرکت
+   29. حالت‌های کاهش حرکت
+   30. حالت کنتراست بالا
+   31. چاپ
+   32. ابزارهای جانبی
+   33. واکنش‌گرایی
+   34. پایان
+   ───────────────────────────────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   01 — توکن‌های طراحی
+   هر تصمیم بصری از این متغیرها می‌گذرد. تغییر یک مقدار، کل
+   دستگاه را هماهنگ می‌کند. هیچ مقدار رنگ یا سایه‌ای در بقیه‌ی
+   فایل سخت‌کد نشده است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── پالت — میز و سطح یک رنگ مشترک دارند.
+        این قاعده‌ی نئومورفیسم است: عناصر برجسته هم‌رنگ محیط‌اند؛
+        فقط سایه‌ها آن‌ها را از هم جدا می‌کنند. ── */
+  --bg: #E4E8EF;
+  --bg-deep: #D1D6DF;
+  --surface: #E4E8EF;
+  --surface-hi: #EDEFF4;
+  --surface-lo: #DCE0E8;
+
+  /* ── جوهر — سه سطح متن ── */
+  --ink: #2B2F3A;
+  --ink-soft: #555B6A;
+  --ink-muted: #8A92A3;
+
+  /* ── لهجه — تنها رنگ. یک نارنجی-بژ گرم. ── */
+  --accent: #E5A870;
+  --accent-deep: #C78950;
+  --accent-soft: rgba(229, 168, 112, 0.18);
+  --accent-glow: rgba(229, 168, 112, 0.32);
+  --accent-tint: rgba(229, 168, 112, 0.06);
+
+  /* ── پیگمنت سایه — مواد خام برای همه‌ی دستورهای نئومورفیک.
+        مستقیم استفاده نکن؛ از توکن‌های ترکیبی زیر استفاده کن. ── */
+  --shadow-light: rgba(255, 255, 255, 0.9);
+  --shadow-dark: rgba(163, 177, 198, 0.6);
+
+  /* ── معنایی ── */
+  --success: #6BBF7A;
+  --danger: #D96A5B;
+
+  /* ── دستورهای سایه — چهار شکل کانونیک نئومورفیک.
+        Raised  = بالای سطح.
+        Inset   = فشرده در سطح.
+        Deep    = عنصر بزرگ‌تر، سایه بزرگ‌تر.
+        Sharp   = لبه‌ی تیز و کمعمق. ── */
+  --shadow-raised:
+    -8px -8px 20px var(--shadow-light),
+     8px  8px 20px var(--shadow-dark);
+  --shadow-raised-sm:
+    -4px -4px 10px var(--shadow-light),
+     4px  4px 10px var(--shadow-dark);
+  --shadow-raised-xs:
+    -2px -2px 6px var(--shadow-light),
+     2px  2px 6px var(--shadow-dark);
+
+  --shadow-inset:
+    inset -6px -6px 16px var(--shadow-light),
+    inset  6px  6px 16px var(--shadow-dark);
+  --shadow-inset-sm:
+    inset -3px -3px 8px var(--shadow-light),
+    inset  3px  3px 8px var(--shadow-dark);
+  --shadow-inset-sharp:
+    inset -2px -2px 6px var(--shadow-light),
+    inset  2px  2px 6px var(--shadow-dark);
+
+  --shadow-deep:
+    -12px -12px 28px var(--shadow-light),
+     12px  12px 28px var(--shadow-dark),
+     1px   1px  2px  var(--shadow-dark);
+  --shadow-deep-sm:
+    -6px -6px 14px var(--shadow-light),
+     6px  6px 14px var(--shadow-dark),
+     1px  1px  2px  var(--shadow-dark);
+
+  /* ── درخشش — هاله‌ی گرم اطراف لهجه ── */
+  --shadow-glow:
+    0 0 0 1px var(--accent-soft),
+    0 0 24px var(--accent-glow);
+  --shadow-glow-sm:
+    0 0 0 1px var(--accent-soft),
+    0 0 12px var(--accent-glow);
+
+  /* ── تایپوگرافی ── */
+  --font: 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+  --fw-thin: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 900;
+
+  /* ── اندازه — بدنه‌ی دستگاه لنگر است ── */
+  --device-width: min(420px, 92vw);
+  --device-width-md: min(440px, 88vw);
+  --device-width-lg: clamp(360px, 480px, 32vw);
+
+  /* ── شعاع‌ها ── */
+  --radius-2xs: 4px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 44px;
+  --radius-round: 999px;
+
+  /* ── فاصله‌گذاری ── */
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ── حرکت ── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-press: cubic-bezier(0.3, 0, 0.5, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 600ms;
+  --dur-enter: 900ms;
+  --dur-ambient: 10s;
+  --dur-shimmer: 8s;
+  --dur-led: 5s;
+
+  /* ── فوکوس ── */
+  --focus-ring:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--accent);
+  --focus-ring-danger:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--danger);
+
+  /* ── چیدمان ── */
+  --site-max: 1200px;
+  --site-padding-inline: clamp(16px, 4vw, 32px);
+
+  /* ── z-index ── */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-card: 20;
+  --z-button: 30;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-skip: 999;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   02 — ریست و پایه
+   یک ریست حداقلی، نظرپسند. آنچه به طراحی خدمت می‌کند نگه
+   می‌داریم، آنچه با آن می‌جنگد حذف می‌کنیم. هر قاعده یک کار دارد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*:where(:not(html, iframe, canvas, img, svg, video, audio, svg *)) {
+  font: inherit;
+  color: inherit;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on;
+  font-variant-numeric: proportional-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-weight: var(--fw-regular);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--bg);
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  opacity: 0;
+  animation: page-fade-in var(--dur-slow) var(--ease-soft) forwards;
+}
+
+@keyframes page-fade-in {
+  to { opacity: 1; }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  fill: currentColor;
+}
+
+.svg-sprite {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-deep);
+  border-radius: var(--radius-round);
+  border: 2px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--shadow-dark);
+}
+
+/* Native disclosure for details element */
+details > summary {
+  cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   03 — تایپوگرافی
+   فقط Vazirmatn. وزن، اندازه، فاصله — سلسله‌مراتب را حمل
+   می‌کنند؛ هرگز فقط به رنگ تکیه نمی‌کنیم. خط‌ارتفاع فارسی سخاوتمند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+body {
+  font-feature-settings:
+    'ss01' on,
+    'ss02' on,
+    'ss03' on,
+    'cv01' on,
+    'cv02' on;
+}
+
+.display {
+  font-weight: var(--fw-black);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.eyebrow {
+  font-weight: var(--fw-regular);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.numeral {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' on, 'lnum' off;
+}
+
+[lang="fa"] p,
+[lang="fa"] li,
+[dir="rtl"] p,
+[dir="rtl"] li {
+  line-height: 1.9;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   04 — پایه‌های دسترس‌پذیری
+   لینک پرش، مدیریت فوکوس، و حلقه‌های "همیشه دیده‌شدنی".
+   حالت کنتراست بالا بخش ۳۰.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.skip-link {
+  position: fixed;
+  inset-block-start: -100%;
+  inset-inline-start: 50%;
+  transform: translateX(50%);
+  z-index: var(--z-skip);
+  padding: 12px 20px;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: var(--fw-bold);
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-raised);
+  transition: inset-block-start 180ms var(--ease-out);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  inset-block-start: 16px;
+  outline: none;
+  box-shadow:
+    var(--shadow-raised),
+    var(--focus-ring);
+}
+
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.device__body:focus-within {
+  box-shadow:
+    var(--shadow-deep),
+    0 0 0 1px var(--accent-soft);
+}
+
+.quote-card:focus-within {
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+    0 0 0 1px var(--accent-soft);
+}
+
+/* Target highlight for the modal */
+#creator:target {
+  animation: modal-appear 320ms var(--ease-out) forwards;
+}
+
+@keyframes modal-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   05 — پس‌زمینه‌ی محیطی
+   دو لایه‌ی تزئینی: درخشش شعاعی گرم (نفس‌کشنده) و یک دانه‌ی
+   نویز ریز که به سطح صاف، لمس‌پذیری می‌بخشد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient__glow {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  width: min(900px, 110vw);
+  height: min(900px, 110vw);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      var(--accent-soft) 0%,
+      var(--accent-tint) 28%,
+      transparent 62%
+    );
+  opacity: 0.65;
+  will-change: opacity, transform;
+  animation: ambient-breathe var(--dur-ambient) var(--ease-in-out) infinite;
+  filter: blur(6px);
+}
+
+.ambient__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.66 0 0 0 0 0.74 0 0 0 0.28 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .ambient__grain {
+    opacity: 0.28;
+    background-size: 220px 220px;
+  }
+}
+
+/* When the user disables the grain */
+.grain-off .ambient__grain {
+  display: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   06 — نوار بالا
+   یک هدر سه‌بخشی: نشان، عنوان، اشاره. هر بخش یک عنصر نئومورفیک
+   کوچک. اشاره یک لینک به #creator است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.site-bar {
+  position: relative;
+  z-index: var(--z-raised);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: var(--site-max);
+  width: 100%;
+  margin-inline: auto;
+  padding-block: clamp(12px, 2.5vw, 18px);
+  padding-inline: var(--site-padding-inline);
+}
+
+.site-bar__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-weight: var(--fw-bold);
+  font-size: 1.125rem;
+  font-style: italic;
+  box-shadow: var(--shadow-raised-sm);
+  flex-shrink: 0;
+  transition: box-shadow 240ms var(--ease-out);
+}
+
+.site-bar:hover .site-bar__mark {
+  box-shadow: var(--shadow-raised);
+}
+
+.site-bar__title {
+  font-weight: var(--fw-bold);
+  font-size: clamp(0.9375rem, 2.4vw, 1.0625rem);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+.site-bar__hint {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 6px 12px;
+  border-radius: var(--radius-round);
+  background: var(--surface);
+  font-size: 0.75rem;
+  font-weight: var(--fw-regular);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-inset-sm);
+  transition:
+    color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+
+.site-bar__hint:hover,
+.site-bar__hint:focus-visible {
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-xs);
+}
+
+.site-bar__hint:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.site-bar__hint-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+  transition: transform 320ms var(--ease-out);
+}
+
+.site-bar__hint:hover .site-bar__hint-icon {
+  transform: rotate(45deg);
+}
+
+.site-bar__hint-text {
+  display: inline-block;
+}
+
+@media (max-width: 360px) {
+  .site-bar__hint-text {
+    display: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   07 — صحنه و چیدمان دستگاه
+   صحنه دستگاه را مرکز می‌کند. دستگاه یک پایه‌ی عمودی است که
+   مثل شیء واقعی روی میز گرم قرار گرفته.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.stage {
+  position: relative;
+  z-index: var(--z-base);
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-block: clamp(24px, 6vw, 64px);
+  padding-inline: var(--site-padding-inline);
+}
+
+.device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  width: var(--device-width);
+  max-width: 100%;
+  perspective: 1600px;
+  perspective-origin: 50% 30%;
+}
+
+@media (min-width: 640px) {
+  .device {
+    width: var(--device-width-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .device {
+    width: var(--device-width-lg);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   08 — دستگاه — بدنه
+   پایه‌ی بزرگ نئومورفیک. سایه‌ی عمیق آن را زمین می‌گیرد؛
+   یک نور داخلی ملایم در لبه‌ی بالا-چپ، پایان فلزی نرم را
+   القا می‌کند. بدنه، ظرف بقیه‌ی اجزا است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__body {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(14px, 3vw, 20px);
+  padding-block:
+    clamp(20px, 4vw, 28px) clamp(28px, 5vw, 40px);
+  padding-inline: clamp(20px, 4.5vw, 30px);
+  border-radius: var(--radius-2xl);
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.32) 0%,
+      rgba(255, 255, 255, 0) 22%,
+      rgba(255, 255, 255, 0) 78%,
+      rgba(163, 177, 198, 0.06) 100%
+    );
+  box-shadow: var(--shadow-deep);
+  transform-style: preserve-3d;
+  transition: transform 600ms var(--ease-out);
+  outline: 1px solid rgba(255, 255, 255, 0.35);
+  outline-offset: -1px;
+  will-change: transform;
+}
+
+.device__body::before {
+  content: '';
+  position: absolute;
+  inset-block-end: -14px;
+  inset-inline: 12%;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(163, 177, 198, 0.25);
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.device__body::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline: 22%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.85) 50%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* When the body is hovered, the whole thing lifts very slightly */
+@media (hover: hover) and (pointer: fine) {
+  .device__body:hover {
+    outline-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   09 — دستگاه — تاج
+   درپوش فلزی حکاکی‌شده در بالا. یک shimmer موی‌مانند هر ۸ ثانیه
+   از روی آن می‌گذرد — دستگاه یک نبض آهسته‌ی زندگی دارد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__crown {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 420 / 96;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(
+      180deg,
+      var(--surface-hi) 0%,
+      var(--surface) 50%,
+      var(--surface-lo) 100%
+    );
+  box-shadow:
+    var(--shadow-raised-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(163, 177, 198, 0.3);
+  overflow: hidden;
+  color: var(--ink-soft);
+  isolation: isolate;
+}
+
+.device__crown-etch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: var(--ink-soft);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.device__crown::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -20%;
+  inset-inline-start: -60%;
+  width: 40%;
+  height: 140%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 0.15) 55%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  transform: skewX(-8deg);
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  animation: crown-shimmer var(--dur-shimmer) var(--ease-in-out) infinite;
+  z-index: 1;
+}
+
+.device__crown::before {
+  content: '';
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 8%;
+  height: 30%;
+  background: linear-gradient(
+    to top,
+    rgba(163, 177, 198, 0.18) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   10 — دستگاه — شکاف
+   دهانه‌ی تاریکی که کارت از آن بیرون می‌آید. چاهی inset با
+   لبی نامتقارن — یک سمت عمیق‌تر، چون اشیای استفاده‌شده هرگز
+   کاملاً متقارن نیستند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__slot {
+  position: relative;
+  width: 78%;
+  height: clamp(10px, 2vw, 14px);
+  margin-inline: auto;
+  margin-block-start: -6px;
+  border-radius: var(--radius-round);
+  background: var(--surface-lo);
+  box-shadow:
+    var(--shadow-inset),
+    inset 0 2px 3px rgba(163, 177, 198, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+}
+
+.device__slot-lip {
+  position: absolute;
+  inset-block-end: 1px;
+  inset-inline: 8%;
+  height: 2px;
+  border-radius: var(--radius-round);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-soft) 20%,
+    var(--accent) 50%,
+    var(--accent-soft) 80%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  filter: blur(1px);
+}
+
+.device__slot-depth {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 4%;
+  height: 40%;
+  border-radius: var(--radius-round);
+  background: rgba(43, 47, 58, 0.35);
+  filter: blur(3px);
+  transform: translateY(-50%);
+  opacity: 0.55;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   11 — کارت نقل‌قول
+   پاسخ اوراکل. یک کارت نئومورفیک با درخشش نرم، چهار گوشه‌ی
+   تزئینی کوچک، و یک نقطه‌ی وضعیت آهسته-ضربان.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.quote-card {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  background: var(--surface-hi);
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(163, 177, 198, 0.18);
+  padding: clamp(18px, 4vw, 26px) clamp(18px, 4.5vw, 28px);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  isolation: isolate;
+  transition:
+    box-shadow 400ms var(--ease-out),
+    transform 500ms var(--ease-out);
+}
+
+.quote-card__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.quote-card__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-align: start;
+}
+
+.quote-card__text {
+  font-size: clamp(0.95rem, 3.8vw, 1.25rem);
+  font-weight: var(--fw-medium);
+  line-height: 1.9;
+  color: var(--ink);
+  text-align: start;
+  min-height: 3.6em;
+  text-wrap: pretty;
+  -webkit-clip-path: inset(0 0 0 0);
+  clip-path: inset(0 0 0 0);
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.quote-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-block-start: var(--space-xs);
+}
+
+.quote-card__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 2px var(--accent-soft),
+    0 0 8px var(--accent-glow);
+  flex-shrink: 0;
+  animation: dot-pulse 3.2s var(--ease-in-out) infinite;
+}
+
+.quote-card__counter {
+  font-size: 0.75rem;
+  font-weight: var(--fw-regular);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  transition: color 180ms var(--ease-out), transform 180ms var(--ease-out);
+  transform-origin: center;
+  display: inline-block;
+}
+
+.quote-card__corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.quote-card__corner::before,
+.quote-card__corner::after {
+  content: '';
+  position: absolute;
+  background: var(--ink-muted);
+  border-radius: var(--radius-round);
+}
+
+.quote-card__corner::before {
+  width: 100%;
+  height: 1px;
+  inset-block-start: 0;
+}
+
+.quote-card__corner::after {
+  width: 1px;
+  height: 100%;
+  inset-inline-start: 0;
+}
+
+.quote-card__corner--tl {
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+}
+
+.quote-card__corner--tr {
+  inset-block-start: 10px;
+  inset-inline-end: 10px;
+  transform: scaleX(-1);
+}
+
+.quote-card__corner--bl {
+  inset-block-end: 10px;
+  inset-inline-start: 10px;
+  transform: scaleY(-1);
+}
+
+.quote-card__corner--br {
+  inset-block-end: 10px;
+  inset-inline-end: 10px;
+  transform: scale(-1, -1);
+}
+
+.quote-card__shine {
+  position: absolute;
+  inset-block-start: -50%;
+  inset-inline-start: -60%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transform: skewX(-10deg) translateX(0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: soft-light;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quote-card:hover {
+    box-shadow:
+      -10px -10px 24px var(--shadow-light),
+       10px  10px 24px var(--shadow-dark),
+       inset 0 1px 0 rgba(255, 255, 255, 0.9),
+       inset 0 -1px 0 rgba(163, 177, 198, 0.18);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   12 — دستگاه — دکمه‌ی اصلی
+   تنها دکمه‌ی اکشن. بزرگ، لمسی، تمام‌عرض. مثل یک فشار فیزیکی.
+   از جفت سایه‌ی raised / pressed استفاده می‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-raised);
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    box-shadow 200ms var(--ease-out),
+    transform 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+  will-change: transform, box-shadow;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.device__btn:hover {
+  box-shadow:
+    -10px -10px 24px var(--shadow-light),
+     10px  10px 24px var(--shadow-dark);
+  color: var(--ink);
+}
+
+.device__btn:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised),
+    var(--focus-ring);
+}
+
+.device__btn:active {
+  box-shadow: var(--shadow-inset);
+  color: var(--ink-soft);
+  transform: scale(0.985);
+  transition-duration: 90ms;
+}
+
+.device__btn.is-pressed {
+  box-shadow: var(--shadow-inset);
+  transform: scale(0.985);
+}
+
+.device__btn-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.device__btn-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 400ms var(--ease-out);
+}
+
+.device__btn:hover .device__btn-icon {
+  transform: rotate(45deg) scale(1.1);
+}
+
+.device__btn-label {
+  font-size: 1.0625rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+}
+
+.device__btn-press {
+  position: absolute;
+  inset: 6px;
+  border-radius: calc(var(--radius-lg) - 4px);
+  background: transparent;
+  pointer-events: none;
+  z-index: 1;
+  box-shadow:
+    inset -3px -3px 8px rgba(255, 255, 255, 0),
+    inset  3px  3px 8px rgba(163, 177, 198, 0);
+  transition: box-shadow 200ms var(--ease-out);
+}
+
+.device__btn:active .device__btn-press,
+.device__btn.is-pressed .device__btn-press {
+  box-shadow:
+    inset -3px -3px 8px rgba(255, 255, 255, 0.55),
+    inset  3px  3px 8px rgba(163, 177, 198, 0.35);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   13 — دستگاه — دکمه‌ی صدا/خواندن
+   یک دکمه‌ی کوچک، آرام، دایره‌ای. هم صدا را روشن می‌کند و هم
+   متن را می‌خواند. حالت data-speaking وقتی در حال خواندن است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__sound {
+  position: absolute;
+  inset-block-start: clamp(58px, 12vw, 68px);
+  inset-inline-end: clamp(14px, 3.5vw, 22px);
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-raised-xs);
+  z-index: 5;
+  transition:
+    box-shadow 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.device__sound:hover {
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.device__sound:active {
+  box-shadow: var(--shadow-inset-sm);
+  transform: scale(0.94);
+}
+
+.device__sound:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.device__sound[aria-pressed="true"] {
+  color: var(--accent);
+  box-shadow:
+    var(--shadow-raised-xs),
+    0 0 0 1px var(--accent-soft);
+}
+
+.device__sound-icon {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1;
+  transform: translateY(-1px);
+  pointer-events: none;
+}
+
+.device__sound-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition:
+    border-color 200ms var(--ease-out),
+    transform 400ms var(--ease-out);
+}
+
+.device__sound[aria-pressed="true"] .device__sound-ring {
+  border-color: var(--accent-soft);
+  animation: sound-ring 2.8s var(--ease-in-out) infinite;
+}
+
+/* ── حالت "در حال خواندن" ──
+   وقتی موتور صدا در حال خواندن است، دکمه نبض می‌زند و
+   نشان می‌دهد چیزی در جریان است. */
+.device__sound[data-speaking="true"] {
+  color: var(--accent-deep);
+  background: var(--surface-hi);
+  box-shadow:
+    var(--shadow-raised-sm),
+    0 0 0 2px var(--accent-soft),
+    0 0 16px var(--accent-glow);
+  animation: sound-speaking-pulse 1.6s var(--ease-in-out) infinite;
+}
+
+.device__sound[data-speaking="true"] .device__sound-icon {
+  animation: sound-icon-beat 1.6s var(--ease-in-out) infinite;
+  display: inline-block;
+}
+
+.device__sound[data-speaking="true"] .device__sound-ring {
+  border-color: var(--accent);
+  border-width: 1.5px;
+  animation: sound-speaking-ring 1.6s var(--ease-in-out) infinite;
+}
+
+/* ── حالت "خواندن معلق" — اگر کاربر در حال تعامل است ── */
+.device__sound.is-speaking-paused {
+  color: var(--accent);
+  animation-play-state: paused;
+}
+
+/* ── حالت "بدون صدای فارسی" — دکمه هنوز کار می‌کند اما
+       یک نشانه‌ی ظریف برای کاربر دارد */
+.device__sound[data-no-persian="true"] {
+  color: var(--accent);
+}
+
+.device__sound[data-no-persian="true"]::after {
+  content: '';
+  position: absolute;
+  inset-block-end: 4px;
+  inset-inline-end: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid var(--surface);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   14 — دستگاه — دریچه‌ها
+   یک ردیف دوازده شکاف نازک inset نزدیک پایه. کاملاً تزئینی؛
+   دستگاه را مثل یک ماشین زمین می‌گذارند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__vents {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(4px, 1vw, 6px);
+  width: 100%;
+  padding-block: var(--space-xs);
+  padding-inline: clamp(4px, 1vw, 8px);
+  margin-block-start: var(--space-2xs);
+}
+
+.device__vent {
+  display: block;
+  height: 4px;
+  border-radius: var(--radius-round);
+  background: var(--surface-lo);
+  box-shadow:
+    inset 0 1px 1px rgba(163, 177, 198, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.device__vent svg {
+  display: none;
+}
+
+.device__vent:nth-child(3n) {
+  opacity: 0.82;
+}
+
+.device__vent:nth-child(4n + 1) {
+  opacity: 0.94;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   15 — دستگاه — پلاک
+   یک پلاک کوچک حکاکی‌شده با نشان سازنده، مدل، و یک موتیف
+   شاخه‌ی گیت. نزدیک پایه‌ی بدنه قرار دارد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__plaque {
+  display: block;
+  width: 62%;
+  max-width: 220px;
+  margin-inline: auto;
+  margin-block: var(--space-2xs) var(--space-sm);
+  color: var(--ink-muted);
+  opacity: 0.85;
+}
+
+.device__plaque-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  color: currentColor;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   16 — دستگاه — LED، پاها، حکاکی‌ها
+   جزئیات کوچکی که شیء را استفاده‌شده نشان می‌دهند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__led {
+  position: absolute;
+  inset-block-start: clamp(18px, 4vw, 24px);
+  inset-inline-start: clamp(18px, 4vw, 24px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 2px var(--accent-soft),
+    0 0 8px var(--accent-glow),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  z-index: 5;
+}
+
+.device__led-core {
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  background: var(--accent-deep);
+  opacity: 0.55;
+  animation: led-breathe var(--dur-led) var(--ease-in-out) infinite;
+}
+
+.device__foot {
+  position: absolute;
+  inset-block-end: -6px;
+  width: 44px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface-lo);
+  box-shadow:
+    inset -2px -2px 4px rgba(255, 255, 255, 0.5),
+    inset 2px 2px 4px rgba(163, 177, 198, 0.7),
+    0 4px 6px rgba(163, 177, 198, 0.25);
+  z-index: -1;
+}
+
+.device__foot--start {
+  inset-inline-start: 18%;
+}
+
+.device__foot--end {
+  inset-inline-end: 18%;
+}
+
+.device__etch {
+  position: absolute;
+  color: var(--ink-muted);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 400ms var(--ease-out);
+}
+
+.device__etch svg {
+  display: block;
+}
+
+.device__etch--one {
+  inset-block-start: 32%;
+  inset-inline-start: 8%;
+}
+
+.device__etch--two {
+  inset-block-end: 22%;
+  inset-inline-start: 10%;
+}
+
+.device__etch--three {
+  inset-block-end: 22%;
+  inset-inline-end: 10%;
+}
+
+.device__etch--four {
+  inset-block-start: 32%;
+  inset-inline-end: 8%;
+  transform: scaleX(-1);
+}
+
+.device__body:hover .device__etch {
+  opacity: 0.5;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   17 — دستگاه — کپشن
+   امضای سازنده زیر دستگاه. همچنین یک لینک به مودال سازنده.
+   از safe-area آگاه است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__caption {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 6px 14px;
+  margin-block-start: var(--space-xs);
+  border-radius: var(--radius-round);
+  font-size: 0.75rem;
+  font-weight: var(--fw-regular);
+  color: var(--ink-muted);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-xs);
+  transition:
+    color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+  margin-block-end: max(var(--space-xs), env(safe-area-inset-bottom, 0px));
+}
+
+.device__caption:hover,
+.device__caption:focus-visible {
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.device__caption:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.device__caption-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   18 — فوتر
+   آرام، سه‌تکه. از safe-area آگاه. هرگز با دستگاه برای جلب
+   توجه رقابت نمی‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.site-foot {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  padding-block:
+    var(--space-md)
+    max(var(--space-md), env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--site-padding-inline);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.site-foot__copy {
+  font-weight: var(--fw-regular);
+}
+
+.site-foot__dot {
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+.site-foot__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink-muted);
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  transition: color 200ms var(--ease-out);
+}
+
+.site-foot__link:hover,
+.site-foot__link:focus-visible {
+  color: var(--ink-soft);
+}
+
+.site-foot__link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.site-foot__icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+  transition: transform 400ms var(--ease-out);
+}
+
+.site-foot__link:hover .site-foot__icon {
+  transform: scale(1.1);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   19 — مودال سازنده
+   خالص CSS از طریق :target. بک‌دراپ یک لینک است؛ دکمه‌ی بستن
+   یک لینک است؛ پنل یک ناحیه‌ی dialog واقعی است.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.creator {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: var(--space-md);
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 280ms var(--ease-out),
+    visibility 0s linear 280ms;
+}
+
+.creator:target {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 320ms var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+.creator__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(43, 47, 58, 0.18) 0%,
+      rgba(43, 47, 58, 0.32) 70%,
+      rgba(43, 47, 58, 0.42) 100%
+    );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+.creator__panel {
+  position: relative;
+  z-index: 2;
+  width: min(440px, 100%);
+  max-height: min(90vh, 640px);
+  overflow-y: auto;
+  padding: clamp(28px, 6vw, 40px) clamp(22px, 5vw, 32px);
+  border-radius: var(--radius-2xl);
+  background: var(--surface);
+  box-shadow:
+    var(--shadow-deep),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  text-align: center;
+  transform: translateY(12px) scale(0.97);
+  opacity: 0;
+  transition:
+    transform 320ms var(--ease-out),
+    opacity 320ms var(--ease-out);
+  outline: 1px solid rgba(255, 255, 255, 0.4);
+  outline-offset: -1px;
+}
+
+.creator:target .creator__panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  transition:
+    transform 380ms var(--ease-out) 80ms,
+    opacity 380ms var(--ease-out) 80ms;
+}
+
+.creator__close {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: 14px;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-raised-xs);
+  transition:
+    color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+  z-index: 3;
+}
+
+.creator__close:hover {
+  color: var(--ink);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.creator__close:active {
+  box-shadow: var(--shadow-inset-sm);
+  transform: scale(0.94);
+}
+
+.creator__close:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.creator__avatar {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin-block-end: var(--space-md);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.creator__avatar-letter {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2.5rem;
+  font-weight: var(--fw-bold);
+  color: var(--accent-deep);
+  line-height: 1;
+  transform: translateY(-2px);
+}
+
+.creator__avatar-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-soft);
+  pointer-events: none;
+}
+
+.creator__title {
+  font-size: clamp(1.375rem, 4.5vw, 1.625rem);
+  font-weight: var(--fw-black);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-block-end: 4px;
+}
+
+.creator__role {
+  font-size: 0.8125rem;
+  font-weight: var(--fw-regular);
+  color: var(--ink-muted);
+  margin-block-end: var(--space-md);
+}
+
+.creator__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-block: var(--space-md);
+  color: var(--accent);
+}
+
+.creator__divider::before,
+.creator__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--shadow-dark) 50%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+.creator__divider-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  flex-shrink: 0;
+}
+
+.creator__bio {
+  font-size: 0.875rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-block-end: var(--space-md);
+}
+
+.creator__links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-block-end: var(--space-md);
+}
+
+.creator__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  box-shadow: var(--shadow-raised-xs);
+  transition:
+    box-shadow 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.creator__link:hover,
+.creator__link:focus-visible {
+  color: var(--ink);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.creator__link:active {
+  box-shadow: var(--shadow-inset-sm);
+}
+
+.creator__link:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.creator__link-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+}
+
+.creator__footnote {
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--ink-muted);
+  padding-block-start: var(--space-sm);
+  border-block-start: 1px solid rgba(163, 177, 198, 0.35);
+}
+
+body:has(.creator:target) {
+  overflow: hidden;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   20 — نوتیف Noscript
+   یک یادداشت ملایم برای کاربر نادر بدون JS.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.noscript-note {
+  position: fixed;
+  inset-block-end: max(16px, env(safe-area-inset-bottom, 0px));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-modal);
+  padding: 12px 20px;
+  max-width: calc(100% - 32px);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  text-align: center;
+  box-shadow: var(--shadow-raised);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   21 — کی‌فریم‌ها و حرکت محیطی
+   همه‌ی انیمیشن‌های حلقه‌ای. هیچ‌چیز فنری؛ هیچ‌چیز که با
+   توجه کاربر رقابت کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@keyframes ambient-breathe {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes crown-shimmer {
+  0% {
+    inset-inline-start: -60%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    inset-inline-start: 120%;
+    opacity: 0;
+  }
+}
+
+@keyframes dot-pulse {
+  0%, 70%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 2px var(--accent-soft),
+      0 0 8px var(--accent-glow);
+  }
+  80% {
+    transform: scale(1.35);
+    box-shadow:
+      0 0 0 3px var(--accent-soft),
+      0 0 12px var(--accent-glow);
+  }
+  90% {
+    transform: scale(1);
+  }
+}
+
+@keyframes led-breathe {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes ripple-out {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.5);
+    opacity: 0;
+  }
+}
+
+@keyframes sound-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ── کی‌فریم‌های حالت گفتار ── */
+
+@keyframes sound-speaking-pulse {
+  0%, 100% {
+    box-shadow:
+      var(--shadow-raised-xs),
+      0 0 0 2px var(--accent-soft),
+      0 0 8px var(--accent-glow);
+  }
+  50% {
+    box-shadow:
+      var(--shadow-raised-sm),
+      0 0 0 4px var(--accent-soft),
+      0 0 18px var(--accent-glow);
+  }
+}
+
+@keyframes sound-speaking-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@keyframes sound-icon-beat {
+  0%, 100% {
+    transform: translateY(-1px) scale(1);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.12);
+  }
+}
+
+@keyframes card-emerge {
+  0% {
+    transform: perspective(900px) translateY(-12px) rotateX(-6deg) scale(0.96);
+    opacity: 0.3;
+  }
+  60% {
+    transform: perspective(900px) translateY(1px) rotateX(0.6deg) scale(1.002);
+    opacity: 1;
+  }
+  100% {
+    transform: perspective(900px) translateY(0) rotateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes card-speak {
+  0% {
+    box-shadow:
+      var(--shadow-raised),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+      0 0 0 0 var(--accent-soft),
+      0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    box-shadow:
+      var(--shadow-raised),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+      0 0 0 1px var(--accent-soft),
+      0 0 22px 2px var(--accent-glow);
+  }
+  100% {
+    box-shadow:
+      var(--shadow-raised),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+      0 0 0 0 var(--accent-soft),
+      0 0 0 0 var(--accent-glow);
+  }
+}
+
+@keyframes text-reveal {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+
+@keyframes copy-button-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes copy-check-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   22 — توست
+   یک توست واحد و قابل استفاده‌ی مجدد در پایین صفحه. از
+   GSAP یا کلاس CSS استفاده می‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.toast {
+  position: fixed;
+  inset-block-end: max(24px, env(safe-area-inset-bottom, 0px));
+  inset-inline-start: 50%;
+  transform: translateX(-50%) translateY(12px);
+  z-index: var(--z-modal);
+  padding: 10px 18px;
+  border-radius: var(--radius-round);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  box-shadow:
+    var(--shadow-raised),
+    0 0 0 1px var(--accent-soft);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+  max-width: calc(100vw - 32px);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-inline-end: var(--space-xs);
+  vertical-align: middle;
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   23 — دکمه‌ی کپی
+   دکمه‌ای کوچک در گوشه‌ی کارت که پس از اولین نقل‌قول ظاهر
+   می‌شود. با کلیک، متن را در clipboard کپی می‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.quote-card__copy {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-raised-xs);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 240ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+  z-index: 3;
+}
+
+.quote-card.has-quote .quote-card__copy {
+  opacity: 1;
+  pointer-events: auto;
+  animation: copy-button-appear 240ms var(--ease-out);
+}
+
+.quote-card__copy:hover {
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.quote-card__copy:active {
+  box-shadow: var(--shadow-inset-sm);
+  transform: scale(0.94);
+}
+
+.quote-card__copy:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.quote-card__copy svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms var(--ease-out);
+}
+
+.quote-card__copy.is-copied {
+  color: var(--success);
+}
+
+.quote-card__copy.is-copied svg {
+  animation: copy-check-pop 320ms var(--ease-out);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   24 — دکمه‌ی اشتراک
+   اگر Web Share API موجود باشد، یک دکمه‌ی کوچک کنار دکمه‌ی کپی
+   ظاهر می‌شود. در غیر این صورت، JS آن را نمی‌سازد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.quote-card__share {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 48px;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-raised-xs);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 240ms var(--ease-out),
+    box-shadow 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+  z-index: 3;
+}
+
+.quote-card.has-quote .quote-card__share {
+  opacity: 1;
+  pointer-events: auto;
+  animation: copy-button-appear 240ms var(--ease-out) 80ms backwards;
+}
+
+.quote-card__share:hover {
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-raised-sm);
+}
+
+.quote-card__share:active {
+  box-shadow: var(--shadow-inset-sm);
+}
+
+.quote-card__share:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-raised-xs),
+    var(--focus-ring);
+}
+
+.quote-card__share svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   25 — حالت‌های گفتار و کارت
+   کلاس‌هایی که JS اضافه/حذف می‌کند. بدون JS، این حالت‌ها
+   غیرفعال‌اند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* کارت در حال "بیرون آمدن" از شکاف — شیب ۳بعدی به عقب */
+.quote-card.is-emerging {
+  transform-origin: 50% 0%;
+  transform: perspective(900px) translateY(-12px) rotateX(-6deg) scale(0.96);
+  opacity: 0.3;
+}
+
+/* کارت جا افتاده */
+.quote-card.is-settled {
+  transform: perspective(900px) translateY(0) rotateX(0deg) scale(1);
+  opacity: 1;
+}
+
+/* یک درخشش گرم اطراف کارت — "اوراکل سخن گفت" */
+.quote-card.is-speaking {
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+    0 0 0 1px var(--accent-soft),
+    0 0 24px var(--accent-glow);
+  animation: card-speak 400ms var(--ease-out);
+}
+
+/* متن نقل‌قول در حال خارج شدن */
+.quote-card__text.is-leaving {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+/* متن نقل‌قول در حال رسیدن — با ماسک clip-path */
+.quote-card__text.is-arriving {
+  animation: text-reveal 320ms var(--ease-out) forwards;
+}
+
+/* شمارنده در حال چرخش */
+.quote-card__counter.is-flipping {
+  color: var(--accent-deep);
+  transform: scale(1.08);
+  transition:
+    color 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+/* اگر داده‌ی گفتار در جریان است، نشانگر روی کارت */
+.quote-card[data-speaking="true"] .quote-card__dot {
+  background: var(--accent-deep);
+  box-shadow:
+    0 0 0 3px var(--accent-soft),
+    0 0 12px var(--accent-glow);
+  animation: sound-speaking-pulse 1.6s var(--ease-in-out) infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   26 — ریپل
+   عنصری که JS در لحظه‌ی کلیک می‌سازد. CSS آن را تعریف می‌کند
+   تا JS فقط append کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.device__btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--accent-soft) 0%,
+    var(--accent-glow) 55%,
+    transparent 75%
+  );
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: 0;
+  animation: ripple-out 600ms var(--ease-out) forwards;
+  will-change: transform, opacity;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   27 — حالت‌های تعاملی
+   کلاس‌هایی که JS برای هماهنگی با CSS اضافه می‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* دکمه‌ی اصلی در حالت فشرده — تضمین بصری حتی اگر :active نباشد */
+.device__btn.is-pressed {
+  box-shadow: var(--shadow-inset);
+  transform: scale(0.985);
+  color: var(--ink-soft);
+}
+
+/* دکمه‌ی صدا در حالت فشرده */
+.device__sound.is-pressed {
+  box-shadow: var(--shadow-inset-sm);
+  transform: scale(0.94);
+}
+
+/* کلاس عمومی برای مخفی کردن */
+.hidden {
+  display: none !important;
+}
+
+.no-pointer {
+  pointer-events: none;
+}
+
+/* وقتی کاربر محتوا را می‌کشد، اسکرول را قفل کن */
+.no-scroll {
+  overflow: hidden !important;
+}
+
+/* کارت با نقل‌قول فعال — دکمه‌های کپی/اشتراک ظاهر می‌شوند */
+.quote-card.has-quote {
+  box-shadow:
+    var(--shadow-raised),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(163, 177, 198, 0.18),
+    0 0 0 1px var(--accent-soft);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   28 — حالت‌های توقف حرکت
+   وقتی JS تشخیص می‌دهد تب مخفی شده یا کاربر حرکت را متوقف
+   کرده، کلاس animations-paused روی body گذاشته می‌شود.
+   ═══════════════════════════════════════════════════════════════════ */
+
+body.animations-paused .ambient__glow,
+body.animations-paused .ambient__grain,
+body.animations-paused .device__crown::after,
+body.animations-paused .quote-card__dot,
+body.animations-paused .device__led-core,
+body.animations-paused .device__sound[data-speaking="true"],
+body.animations-paused .device__sound[data-speaking="true"] .device__sound-icon,
+body.animations-paused .device__sound[data-speaking="true"] .device__sound-ring {
+  animation-play-state: paused !important;
+}
+
+body.animations-paused .device__sound[aria-pressed="true"] .device__sound-ring {
+  animation-play-state: paused !important;
+}
+
+/* وقتی حرکات متوقف است، هیچ ترنزیشن غیرضروری اجرا نشود */
+body.animations-paused .quote-card,
+body.animations-paused .device__body,
+body.animations-paused .device__btn {
+  transition-duration: 0.001ms !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   29 — کاهش حرکت
+   برای کاربرانی که از سیستم می‌خواهند انیمیشن‌ها آرام شوند.
+   فقط opacity می‌ماند؛ همه‌ی ترنسفورم‌ها، چرخش‌ها و مقیاس‌ها
+   حذف می‌شوند. لایه‌ی افزوده‌ی JS هم این ترجیح را رعایت می‌کند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    animation: none;
+    opacity: 1;
+  }
+
+  .ambient__glow {
+    animation: none;
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .device__crown::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .quote-card__dot {
+    animation: none;
+  }
+
+  .device__led-core {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .device__sound[aria-pressed="true"] .device__sound-ring {
+    animation: none;
+    opacity: 0.6;
+  }
+
+  .device__sound[data-speaking="true"] {
+    animation: none;
+  }
+
+  .device__sound[data-speaking="true"] .device__sound-icon {
+    animation: none;
+  }
+
+  .device__sound[data-speaking="true"] .device__sound-ring {
+    animation: none;
+  }
+
+  .device__btn:hover .device__btn-icon {
+    transform: none;
+  }
+
+  .site-bar__hint:hover .site-bar__hint-icon {
+    transform: none;
+  }
+
+  .device__btn:active,
+  .device__btn.is-pressed {
+    transform: none;
+  }
+
+  .device__sound:active,
+  .device__sound.is-pressed {
+    transform: none;
+  }
+
+  .quote-card__copy:active {
+    transform: none;
+  }
+
+  .creator__panel {
+    transform: none;
+    transition: opacity 200ms ease;
+  }
+
+  .creator:target .creator__panel {
+    transform: none;
+    transition: opacity 200ms ease;
+  }
+
+  /* هر ترنسفورم درون‌خطی که JS ممکن است اعمال کند را خنثی کن */
+  .device__body {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .quote-card {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .quote-card.is-emerging,
+  .quote-card.is-settled {
+    transform: none !important;
+  }
+
+  .quote-card__text.is-leaving {
+    transform: none !important;
+  }
+
+  .quote-card__text.is-arriving {
+    animation: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+
+  .device__btn .ripple {
+    display: none !important;
+  }
+
+  .toast {
+    transition: opacity 200ms ease;
+  }
+
+  .toast.is-visible {
+    transform: translateX(-50%);
+  }
+
+  /* شیب موس در JS هم غیرفعال است؛ اینجا هم اطمینان می‌دهیم */
+  .device__body {
+    will-change: auto;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   30 — کنتراست بالا
+   برای کاربرانی که از سیستم کنتراست قوی‌تر می‌خواهند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --ink: #14181F;
+    --ink-soft: #2C3340;
+    --ink-muted: #4A5261;
+    --accent: #B96A2A;
+    --accent-deep: #8E4E1A;
+    --accent-soft: rgba(185, 106, 42, 0.22);
+    --accent-glow: rgba(185, 106, 42, 0.4);
+    --shadow-light: rgba(255, 255, 255, 1);
+    --shadow-dark: rgba(120, 135, 158, 0.75);
+  }
+
+  *:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--bg),
+      0 0 0 4px var(--accent),
+      0 0 0 6px var(--bg);
+  }
+
+  .quote-card,
+  .device__btn,
+  .device__sound,
+  .creator__panel,
+  .creator__close,
+  .creator__link,
+  .site-bar__mark,
+  .device__caption,
+  .quote-card__copy,
+  .quote-card__share {
+    outline: 1px solid rgba(43, 47, 58, 0.2);
+    outline-offset: 1px;
+  }
+
+  .quote-card__text,
+  .creator__bio,
+  .creator__role,
+  .creator__footnote {
+    font-weight: var(--fw-medium);
+  }
+
+  .device__crown-etch,
+  .device__plaque-svg,
+  .device__etch {
+    opacity: 1;
+    color: var(--ink-soft);
+  }
+
+  .quote-card__corner::before,
+  .quote-card__corner::after {
+    background: var(--ink-soft);
+    opacity: 1;
+  }
+
+  .toast {
+    outline: 1px solid var(--ink-soft);
+    outline-offset: 1px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   31 — چاپ
+   دستگاه روی کاغذ. سایه‌ها فرو می‌ریزند؛ نقل‌قول تنها چیزی است
+   که اهمیت دارد.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media print {
+  :root {
+    --bg: #fff;
+    --ink: #000;
+    --ink-soft: #222;
+    --accent: #000;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+    animation: none;
+    opacity: 1;
+  }
+
+  .ambient,
+  .site-bar__hint,
+  .device__sound,
+  .site-foot,
+  .device__caption,
+  .creator,
+  .skip-link,
+  .noscript-note,
+  .device__vents,
+  .device__led,
+  .device__foot,
+  .device__etch,
+  .device__crown,
+  .device__slot,
+  .device__plaque,
+  .device__btn,
+  .quote-card__corner,
+  .quote-card__shine,
+  .quote-card__dot,
+  .quote-card__copy,
+  .quote-card__share,
+  .toast {
+    display: none !important;
+  }
+
+  .device,
+  .device__body,
+  .quote-card {
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .quote-card {
+    border: 1pt solid #000;
+    padding: 12pt !important;
+    margin-block-end: 8pt;
+  }
+
+  .quote-card__text {
+    color: #000;
+    font-size: 14pt;
+    line-height: 1.7;
+    min-height: 0;
+  }
+
+  .site-bar__title {
+    color: #000;
+    font-size: 14pt;
+  }
+
+  .site-bar__mark {
+    box-shadow: none;
+    border: 1pt solid #000;
+    color: #000;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  @page {
+    margin: 18mm;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   32 — ابزارهای جانبی
+   کلاس‌های عمومی که ممکن است در آینده استفاده شوند.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.grow {
+  flex: 1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.accent-deep {
+  color: var(--accent-deep);
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   33 — واکنش‌گرایی
+   افزودنی به بالا. کوچک‌ترین حالت اول؛ بزرگ‌تر تدریجی.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── تبلت (≥ 640px) ── */
+@media (min-width: 640px) {
+  .device__body {
+    padding-block:
+      clamp(24px, 3vw, 32px) clamp(32px, 4vw, 44px);
+    padding-inline: clamp(24px, 3vw, 34px);
+    gap: clamp(16px, 2.5vw, 22px);
+  }
+
+  .quote-card {
+    padding: clamp(22px, 3.5vw, 30px) clamp(22px, 3.5vw, 32px);
+  }
+
+  .device__sound {
+    inset-block-start: clamp(64px, 9vw, 78px);
+    inset-inline-end: clamp(20px, 3vw, 28px);
+    width: 42px;
+    height: 42px;
+  }
+
+  .quote-card__copy,
+  .quote-card__share {
+    width: 32px;
+    height: 32px;
+  }
+
+  .quote-card__share {
+    inset-inline-start: 50px;
+  }
+}
+
+/* ── دسکتاپ (≥ 1024px) ── */
+@media (min-width: 1024px) {
+  body {
+    font-size: 17px;
+  }
+
+  .stage {
+    padding-block: clamp(48px, 8vw, 96px);
+  }
+
+  .device__body {
+    padding-block:
+      clamp(28px, 3vw, 38px) clamp(40px, 4vw, 52px);
+    padding-inline: clamp(28px, 3.5vw, 38px);
+    gap: clamp(18px, 2vw, 24px);
+  }
+
+  .device__crown {
+    aspect-ratio: 420 / 92;
+  }
+
+  .quote-card {
+    padding: 28px 32px;
+  }
+
+  .quote-card__text {
+    font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  }
+
+  .device__btn {
+    min-height: 68px;
+  }
+
+  .device__btn-label {
+    font-size: 1.125rem;
+  }
+
+  .device__crown::after {
+    opacity: 1;
+  }
+
+  .toast {
+    font-size: 0.875rem;
+    padding: 12px 22px;
+  }
+}
+
+/* ── بسیار کوچک (≤ 340px) ── */
+@media (max-width: 340px) {
+  .device__body {
+    padding-inline: 16px;
+    border-radius: var(--radius-xl);
+  }
+
+  .quote-card {
+    padding: 16px 18px;
+    border-radius: var(--radius-lg);
+  }
+
+  .quote-card__text {
+    font-size: 0.9375rem;
+    line-height: 1.85;
+  }
+
+  .device__btn {
+    min-height: 58px;
+    border-radius: var(--radius-md);
+  }
+
+  .device__btn-label {
+    font-size: 0.9375rem;
+  }
+
+  .device__sound {
+    width: 34px;
+    height: 34px;
+    inset-block-start: 52px;
+    inset-inline-end: 12px;
+  }
+
+  .device__led {
+    width: 7px;
+    height: 7px;
+  }
+
+  .device__vents {
+    gap: 3px;
+  }
+
+  .device__vent {
+    height: 3px;
+  }
+
+  .creator__panel {
+    padding: 24px 18px;
+  }
+
+  .creator__avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .creator__avatar-letter {
+    font-size: 2rem;
+  }
+
+  .site-bar__mark {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .quote-card__copy,
+  .quote-card__share {
+    width: 28px;
+    height: 28px;
+  }
+
+  .quote-card__share {
+    inset-inline-start: 44px;
+  }
+
+  .toast {
+    font-size: 0.75rem;
+    padding: 8px 14px;
+  }
+}
+
+/* ── صفحه‌ی بسیار بزرگ (≥ 1440px) ── */
+@media (min-width: 1440px) {
+  .stage {
+    padding-block: clamp(64px, 10vw, 120px);
+  }
+
+  .device {
+    width: clamp(380px, 500px, 34vw);
+  }
+}
+
+/* ── صفحه‌ی خیلی کوتاه (ارتفاع کم) ── */
+@media (max-height: 600px) {
+  .stage {
+    padding-block: 16px;
+  }
+
+  .device {
+    gap: var(--space-xs);
+  }
+
+  .device__body {
+    padding-block: 16px 20px;
+    gap: 10px;
+  }
+
+  .quote-card {
+    padding: 14px 18px;
+  }
+
+  .quote-card__text {
+    min-height: 2.6em;
+    line-height: 1.7;
+  }
+}
+
+/* ── فقط لمسی ── */
+@media (hover: none) and (pointer: coarse) {
+  .device__btn:hover {
+    box-shadow: var(--shadow-raised);
+    color: var(--ink);
+  }
+
+  .device__btn:hover .device__btn-icon {
+    transform: none;
+  }
+
+  .site-bar__hint:hover .site-bar__hint-icon {
+    transform: none;
+  }
+
+  .quote-card:hover {
+    box-shadow:
+      var(--shadow-raised),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(163, 177, 198, 0.18);
+  }
+
+  .device__sound:hover {
+    color: var(--ink-muted);
+    box-shadow: var(--shadow-raised-xs);
+  }
+
+  .quote-card__copy:hover,
+  .quote-card__share:hover {
+    color: var(--ink-muted);
+    box-shadow: var(--shadow-raised-xs);
+  }
+
+  .device__body:hover .device__etch {
+    opacity: 0.32;
+  }
+}
+
+/* ── فقط ماوس ── */
+@media (hover: hover) and (pointer: fine) {
+  .device__sound[data-speaking="true"]:hover {
+    color: var(--accent-deep);
+  }
+}
+
+/* ── حالت افقی روی موبایل ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .stage {
+    padding-block: 8px;
+  }
+
+  .device__crown {
+    display: none;
+  }
+
+  .device__slot {
+    margin-block-start: 0;
+  }
+
+  .device__body {
+    padding-block: 12px 16px;
+  }
+
+  .device__plaque,
+  .device__vents,
+  .device__etch,
+  .device__led {
+    display: none;
+  }
+
+  .quote-card__text {
+    min-height: 2.2em;
+  }
+
+  .device__btn {
+    min-height: 50px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   34 — پایان
+   ═══════════════════════════════════════════════════════════════════ */   
